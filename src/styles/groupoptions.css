@@ -1,0 +1,26 @@
+/* 注意：由于CSS变量在React应用中需要通过JavaScript设置，
+   这里使用类名来组织样式，动态主题变量在组件中通过style属性设置 */
+
+.group-options-sider {
+    /* background由组件中的style属性动态设置 */
+}
+
+.group-options-menu {
+    height: 100%;
+    border-inline-end: 0;
+}
+
+.group-options-layout {
+    padding: 0 24px 24px;
+}
+
+.group-options-breadcrumb {
+    margin: 16px 0;
+}
+
+.group-options-content {
+    padding: 24px;
+    margin: 0;
+    min-height: 280px;
+    /* background和border-radius由组件中的style属性动态设置 */
+}

@@ -1,0 +1,9 @@
+.app-navigator-header {
+  display: flex;
+  align-items: center;
+}
+
+.app-navigator-menu {
+  flex: 1;
+  min-width: 0;
+}
