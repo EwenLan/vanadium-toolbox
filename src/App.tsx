@@ -8,22 +8,76 @@ import Nav2 from "./pages/home/nav2";
 import Nav3 from "./pages/home/nav3";
 import AppNavigator from "./templates/appnavigator";
 import About from "./pages/about";
+import { invoke } from '@tauri-apps/api/core';
+
+interface Config {
+  theme: string;
+  language: string;
+  window_width: number;
+  window_height: number;
+}
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [language, setLanguage] = useState('zh-CN');
 
   useEffect(() => {
-    // 从localStorage中读取主题设置
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark');
-    }
+    // 从后端读取配置
+    const loadConfig = async () => {
+      try {
+        const config = await invoke<Config>('read_config');
+        setIsDarkMode(config.theme === 'dark');
+        setLanguage(config.language);
+        // 切换语言
+        const i18n = await import('./i18n');
+        i18n.default.changeLanguage(config.language);
+      } catch (error) {
+        console.error('Failed to load config:', error);
+        // 使用默认配置
+        setIsDarkMode(false);
+        setLanguage('zh-CN');
+      }
+    };
+
+    loadConfig();
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
     const newTheme = !isDarkMode;
     setIsDarkMode(newTheme);
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+    // 写入配置到后端
+    try {
+      await invoke('write_config', {
+        config: {
+          theme: newTheme ? 'dark' : 'light',
+          language,
+          window_width: 800,
+          window_height: 600
+        }
+      });
+    } catch (error) {
+      console.error('Failed to save config:', error);
+    }
+  };
+
+  const changeLanguage = async (newLanguage: string) => {
+    setLanguage(newLanguage);
+    // 切换语言
+    const i18n = await import('./i18n');
+    i18n.default.changeLanguage(newLanguage);
+    // 写入配置到后端
+    try {
+      await invoke('write_config', {
+        config: {
+          theme: isDarkMode ? 'dark' : 'light',
+          language: newLanguage,
+          window_width: 800,
+          window_height: 600
+        }
+      });
+    } catch (error) {
+      console.error('Failed to save config:', error);
+    }
   };
 
   return (
@@ -34,7 +88,7 @@ function App() {
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AppNavigator isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} >
+          <Route path="/" element={<AppNavigator isDarkMode={isDarkMode} toggleTheme={toggleTheme} language={language} changeLanguage={changeLanguage} />} >
             <Route path="/home" element={<GroupOptions />}>
               <Route path="nav1" element={<Nav1 />} />
               <Route path="nav2" element={<Nav2 />} />

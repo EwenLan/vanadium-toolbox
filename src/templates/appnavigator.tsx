@@ -10,13 +10,15 @@ const { Header } = Layout;
 interface AppNavigatorProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
+  language: string;
+  changeLanguage: (language: string) => void;
 }
 
-export default function AppNavigator({ isDarkMode, toggleTheme }: AppNavigatorProps) {
-    const { t, i18n } = useTranslation();
+export default function AppNavigator({ isDarkMode, toggleTheme, language, changeLanguage }: AppNavigatorProps) {
+    const { t } = useTranslation();
 
     const handleLanguageChange = (value: string) => {
-        i18n.changeLanguage(value);
+        changeLanguage(value);
     };
 
     const items1: MenuProps['items'] = [
@@ -54,7 +56,7 @@ export default function AppNavigator({ isDarkMode, toggleTheme }: AppNavigatorPr
                     </div>
                     <div className="language-selector">
                         <Select
-                            defaultValue="zh-CN"
+                            value={language}
                             style={{ width: 120 }}
                             onChange={handleLanguageChange}
                             options={[
