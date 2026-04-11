@@ -61,9 +61,13 @@ async fn write_config(config: Config) -> Result<(), String> {
 }
 
 fn get_config_path() -> PathBuf {
-    // Get current directory
-    let current_dir = std::env::current_dir().expect("Failed to get current directory");
-    current_dir.join("config.json")
+    // Get the directory of the executable
+    let exe_path = std::env::current_exe().expect("Failed to get executable path");
+    let exe_dir = exe_path.parent().expect("Failed to get executable directory");
+    println!("Executable directory: {:?}", exe_dir);
+    let config_path = exe_dir.join("config.json");
+    println!("Config file path: {:?}", config_path);
+    config_path
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

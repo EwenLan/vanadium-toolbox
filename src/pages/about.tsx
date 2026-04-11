@@ -6,9 +6,9 @@ export default function About() {
     const { t } = useTranslation();
     const { token } = useToken();
     return (
-        <div>
-            <h1 style={{ color: token.colorTextHeading }}>{t('about.title')}</h1>
-            <p style={{ color: token.colorText }}>{t('about.description')}</p>
+        <div style={{ padding: '40px 60px', maxWidth: '800px', margin: '0 auto' }}>
+            <h1 style={{ color: token.colorTextHeading, marginBottom: '20px' }}>{t('about.title')}</h1>
+            <p style={{ color: token.colorText, lineHeight: '1.6' }}>{t('about.description')}</p>
         </div>
     )
 }
