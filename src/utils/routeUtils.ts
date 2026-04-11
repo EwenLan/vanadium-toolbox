@@ -49,8 +49,23 @@ const findTitleInRoutes = (
  * @returns 路由标题
  */
 export const getRouteTitle = (path: string): string => {
+  // 处理外部程序详情页面的路径
+  if (path.startsWith('/external/program/')) {
+    return '程序详情';
+  }
+  
   const title = findTitleInRoutes(routes, path);
   return title || path.split('/').pop() || path;
+};
+
+/**
+ * 获取指定路径的路由子配置
+ * @param parentPath 父路径
+ * @returns 子路由数组
+ */
+export const getRouteChildren = (parentPath: string): RouteConfig[] => {
+  const parentRoute = routes[0].children?.find(route => route.path === parentPath);
+  return parentRoute?.children || [];
 };
 
 /**
@@ -58,6 +73,13 @@ export const getRouteTitle = (path: string): string => {
  * @returns home路由的子路由数组
  */
 export const getHomeRouteChildren = (): RouteConfig[] => {
-  const homeRoute = routes[0].children?.find(route => route.path === 'home');
-  return homeRoute?.children || [];
+  return getRouteChildren('home');
+};
+
+/**
+ * 获取外部程序路由的子路由配置
+ * @returns 外部程序路由的子路由数组
+ */
+export const getExternalRouteChildren = (): RouteConfig[] => {
+  return getRouteChildren('external');
 };

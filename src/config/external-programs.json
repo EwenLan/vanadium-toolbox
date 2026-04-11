@@ -1,0 +1,57 @@
+{
+  "programs": [
+    {
+      "id": "md5sum",
+      "name": "MD5 校验",
+      "path": "md5sum",
+      "description": "计算文件或字符串的 MD5 哈希值",
+      "parameters": [
+        {
+          "name": "input",
+          "label": "输入",
+          "type": "string",
+          "required": true,
+          "description": "要计算 MD5 的字符串或文件路径"
+        }
+      ]
+    },
+    {
+      "id": "echo",
+      "name": "Echo 命令",
+      "path": "echo",
+      "description": "输出指定的字符串",
+      "parameters": [
+        {
+          "name": "message",
+          "label": "消息",
+          "type": "string",
+          "required": true,
+          "description": "要输出的消息"
+        }
+      ]
+    },
+    {
+      "id": "ping",
+      "name": "Ping 测试",
+      "path": "ping",
+      "description": "测试网络连接",
+      "parameters": [
+        {
+          "name": "host",
+          "label": "主机",
+          "type": "string",
+          "required": true,
+          "description": "要 ping 的主机地址"
+        },
+        {
+          "name": "count",
+          "label": "次数",
+          "type": "number",
+          "required": false,
+          "default": 4,
+          "description": "ping 的次数"
+        }
+      ]
+    }
+  ]
+}

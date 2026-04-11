@@ -9,6 +9,9 @@ import Nav1 from '../pages/home/nav1';
 import Nav2 from '../pages/home/nav2';
 import Nav3 from '../pages/home/nav3';
 import About from '../pages/about';
+import ProgramsList from '../pages/external/programs';
+import ProgramDetail from '../pages/external/program';
+
 
 /**
  * 路由配置接口
@@ -64,6 +67,30 @@ export const routes: RouteConfig[] = [
             element: <Nav3 />,
             label: 'Nav 3',
             title: 'Nav 3'
+          }
+        ]
+      },
+      {
+        path: 'external',
+        element: <GroupOptions />,
+        label: '外部程序',
+        title: '外部程序',
+        children: [
+          {
+            path: '',
+            redirect: 'programs',
+            index: true
+          },
+          {
+            path: 'programs',
+            element: <ProgramsList />,
+            label: '程序列表',
+            title: '程序列表'
+          },
+          {
+            path: 'program/:id',
+            element: <ProgramDetail />,
+            title: '程序详情'
           }
         ]
       },

@@ -6,7 +6,7 @@ import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import '../styles/groupoptions.css';
-import { getHomeRouteChildren, getRouteTitle } from '../utils/routeUtils';
+import { getRouteChildren, getRouteTitle } from '../utils/routeUtils';
 
 const { Content, Sider } = Layout;
 
@@ -45,12 +45,15 @@ export default function GroupOptions() {
      * 生成导航菜单项
      */
     const generateMenuItems = (): MenuProps['items'] => {
-        const children = getHomeRouteChildren();
+        const path = location.pathname;
+        const parentPath = path.split('/')[1] || 'home';
+        const children = getRouteChildren(parentPath);
+        
         return children
             .filter(route => route.element && !route.redirect)
             .map((route, index) => ({
                 key: (index + 1).toString(),
-                label: route.label ? <NavLink to={`/home/${route.path}`}>{route.label}</NavLink> : route.path
+                label: route.label ? <NavLink to={`/${parentPath}/${route.path}`}>{route.label}</NavLink> : route.path
             }));
     };
 
