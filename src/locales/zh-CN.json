@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "nav1": "导航1",
+    "nav2": "导航2",
+    "nav3": "导航3"
+  },
+  "home": {
+    "title": "欢迎来到 Vanadium Toolbox",
+    "description": "这是一个功能强大的工具集合"
+  },
+  "about": {
+    "title": "关于我们",
+    "description": "Vanadium Toolbox 是一个开源项目，旨在提供各种实用工具"
+  },
+  "language": {
+    "zh-CN": "中文",
+    "en-US": "English"
+  }
+}

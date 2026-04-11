@@ -7,6 +7,7 @@ import Nav2 from "./pages/home/nav2";
 import Nav3 from "./pages/home/nav3";
 import AppNavigator from "./templates/appnavigator";
 import About from "./pages/about";
+import "./i18n";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

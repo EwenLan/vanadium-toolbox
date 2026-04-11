@@ -1,9 +1,14 @@
 .app-navigator-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .app-navigator-menu {
   flex: 1;
   min-width: 0;
+}
+
+.language-selector {
+  margin-left: 20px;
 }
