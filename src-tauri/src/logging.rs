@@ -1,6 +1,6 @@
 /// logging 添加依赖 cargo add chrono log log4rs
 use chrono::Local;
-use log::LevelFilter;
+use log::{LevelFilter, error, warn, info, debug, trace};
 use log4rs::{
     append::{console::ConsoleAppender, file::FileAppender},
     config::{Appender, Config, Root},
@@ -37,5 +37,18 @@ pub fn init_logger() -> Result<(), Box<dyn std::error::Error>> {
                 .build(LevelFilter::Debug),
         )?;
     log4rs::init_config(config)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn log_message(level: String, message: String) -> Result<(), String> {
+    match level.as_str() {
+        "trace" => trace!("{}", message),
+        "debug" => debug!("{}", message),
+        "info" => info!("{}", message),
+        "warn" => warn!("{}", message),
+        "error" => error!("{}", message),
+        _ => info!("{}", message),
+    }
     Ok(())
 }
