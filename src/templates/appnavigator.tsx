@@ -3,6 +3,7 @@ import { Layout, Menu, Select, Switch } from 'antd';
 import { NavLink, Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { MoonOutlined, SunOutlined } from '@ant-design/icons';
+import log from '../utils/logger';
 import '../styles/appnavigator.css';
 
 const { Header } = Layout;
@@ -17,18 +18,41 @@ interface AppNavigatorProps {
 export default function AppNavigator({ isDarkMode, toggleTheme, language, changeLanguage }: AppNavigatorProps) {
     const { t } = useTranslation();
 
-    const handleLanguageChange = (value: string) => {
+    const handleLanguageChange = async (value: string) => {
+        log.debug(`User action: change language to ${value}`);
         changeLanguage(value);
+    };
+
+    const handleThemeToggle = async () => {
+        log.debug(`User action: toggle theme to ${!isDarkMode ? 'dark' : 'light'}`);
+        toggleTheme();
+    };
+
+    const handleNavClick = async (key: string) => {
+        let route = '';
+        switch (key) {
+            case '1':
+                route = '/home/nav1';
+                break;
+            case '2':
+                route = '/about';
+                break;
+            default:
+                route = '/home/nav1';
+        }
+        log.debug(`User action: navigate to ${route}`);
     };
 
     const items1: MenuProps['items'] = [
         {
             key: "1",
             label: <NavLink to="/home/nav1">{t('nav.home')}</NavLink>,
+            onClick: () => handleNavClick('1'),
         },
         {
             key: "2",
             label: <NavLink to="/about">{t('nav.about')}</NavLink>,
+            onClick: () => handleNavClick('2'),
         },
     ];
 
@@ -48,7 +72,7 @@ export default function AppNavigator({ isDarkMode, toggleTheme, language, change
                     <div className="theme-toggle">
                         <Switch
                             checked={isDarkMode}
-                            onChange={toggleTheme}
+                            onChange={handleThemeToggle}
                             checkedChildren={<MoonOutlined />}
                             unCheckedChildren={<SunOutlined />}
                             style={{ color: isDarkMode ? '#1890ff' : '#1890ff' }}
