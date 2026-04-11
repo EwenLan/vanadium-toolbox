@@ -24,15 +24,12 @@ interface Config {
 export const loadConfig = async (): Promise<Config> => {
   try {
     log.info('Loading config from backend');
-    // 调用后端API读取配置
     const config = await invoke('read_config', {}) as Config;
-    log.debug(`Config received: ${JSON.stringify(config)}`);
     if (config) {
       log.info(`Config loaded successfully: theme=${config.theme}, language=${config.language}`);
       return config;
     } else {
       log.info('Using default config: theme=light, language=zh-CN');
-      // 返回默认配置
       return {
         theme: 'light',
         language: 'zh-CN',
@@ -41,8 +38,7 @@ export const loadConfig = async (): Promise<Config> => {
       };
     }
   } catch (error: any) {
-    log.error(`Failed to load config: ${error.message}, Using default config due to error: theme=light, language=zh-CN`);
-    // 错误时返回默认配置
+    log.error(`Failed to load config: ${error.message}, using default config`);
     return {
       theme: 'light',
       language: 'zh-CN',
@@ -60,10 +56,9 @@ export const loadConfig = async (): Promise<Config> => {
  */
 export const saveConfig = async (config: Config): Promise<boolean> => {
   try {
-    log.debug(`Saving config: ${JSON.stringify(config)}`);
-    // 调用后端API写入配置
+    log.debug(`Saving config: theme=${config.theme}, language=${config.language}`);
     await invoke('write_config', { config: config });
-    log.info(`Config saved successfully: theme=${config.theme}, language=${config.language}`);
+    log.info(`Config saved successfully`);
     return true;
   } catch (error: any) {
     log.error(`Failed to save config: ${error.message}`);

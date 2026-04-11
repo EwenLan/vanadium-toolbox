@@ -1,7 +1,15 @@
+/**
+ * 关于页面
+ * 展示应用的关于信息
+ */
 import { useTranslation } from 'react-i18next';
 import { theme } from 'antd';
 const { useToken } = theme;
 
+/**
+ * About 组件
+ * @returns 关于页面内容
+ */
 export default function About() {
     const { t } = useTranslation();
     const { token } = useToken();

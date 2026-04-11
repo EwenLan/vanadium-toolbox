@@ -5,14 +5,10 @@
 import "./App.css";
 import { useState, useEffect } from 'react';
 import { ConfigProvider, theme } from 'antd';
-import { BrowserRouter, Route, Routes, Navigate } from "react-router";
-import GroupOptions from "./templates/groupoptions";
-import Nav1 from "./pages/home/nav1";
-import Nav2 from "./pages/home/nav2";
-import Nav3 from "./pages/home/nav3";
+import { BrowserRouter, Routes, Route } from "react-router";
 import AppNavigator from "./templates/appnavigator";
-import About from "./pages/about";
 import { loadAppConfig, toggleTheme, changeLanguage } from './utils/appLogic';
+import { generateRoutes, routes } from './utils/routes.tsx';
 
 /**
  * App 组件
@@ -68,18 +64,8 @@ function App() {
               /> 
             } 
           >
-            {/* 默认重定向到首页 */}
-            <Route index element={<Navigate to="/home/nav1" replace />} />
-            {/* 主页路由组 */}
-            <Route path="home" element={<GroupOptions />}>
-              {/* 主页默认重定向到nav1 */}
-              <Route index element={<Navigate to="nav1" replace />} />
-              <Route path="nav1" element={<Nav1 />} />
-              <Route path="nav2" element={<Nav2 />} />
-              <Route path="nav3" element={<Nav3 />} />
-            </Route>
-            {/* 关于页面 */}
-            <Route path="about" element={<About />} />
+            {/* 生成路由配置 */}
+            {generateRoutes(routes[0].children || [])}
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,3 +1,7 @@
+/**
+ * 应用导航栏组件
+ * 提供顶部导航菜单、主题切换和语言选择功能
+ */
 import type { MenuProps } from 'antd';
 import { Layout, Menu, Select, Switch } from 'antd';
 import { NavLink, Outlet } from 'react-router';
@@ -8,6 +12,9 @@ import '../styles/appnavigator.css';
 
 const { Header } = Layout;
 
+/**
+ * 导航栏组件属性
+ */
 interface AppNavigatorProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
@@ -15,19 +22,33 @@ interface AppNavigatorProps {
   changeLanguage: (language: string) => void;
 }
 
+/**
+ * 应用导航栏组件
+ * @param props 组件属性
+ * @returns 导航栏组件
+ */
 export default function AppNavigator({ isDarkMode, toggleTheme, language, changeLanguage }: AppNavigatorProps) {
     const { t } = useTranslation();
 
+    /**
+     * 处理语言切换
+     */
     const handleLanguageChange = async (value: string) => {
         log.debug(`User action: change language to ${value}`);
         changeLanguage(value);
     };
 
+    /**
+     * 处理主题切换
+     */
     const handleThemeToggle = async () => {
         log.debug(`User action: toggle theme to ${!isDarkMode ? 'dark' : 'light'}`);
         toggleTheme();
     };
 
+    /**
+     * 处理导航点击
+     */
     const handleNavClick = async (key: string) => {
         let route = '';
         switch (key) {

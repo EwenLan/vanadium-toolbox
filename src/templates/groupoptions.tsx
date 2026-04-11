@@ -1,25 +1,19 @@
+/**
+ * 分组选项布局组件
+ * 提供侧边栏导航和面包屑功能
+ */
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import '../styles/groupoptions.css';
+import { getHomeRouteChildren, getRouteTitle } from '../utils/routeUtils';
 
 const { Content, Sider } = Layout;
 
-const items2: MenuProps['items'] = [
-    {
-        key: "1",
-        label: <NavLink to="/home/nav1">Nav 1</NavLink>,
-    },
-    {
-        key: "2",
-        label: <NavLink to="/home/nav2">Nav 2</NavLink>,
-    },
-    {
-        key: "3",
-        label: <NavLink to="/home/nav3">Nav 3</NavLink>,
-    },
-]
-
+/**
+ * 生成分组选项组件
+ * 包含侧边栏导航和面包屑导航
+ */
 export default function GroupOptions() {
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -27,45 +21,41 @@ export default function GroupOptions() {
 
     const location = useLocation();
 
-    // 路由路径到标题的映射
-    const pathTitleMap: Record<string, string> = {
-        '/home': 'Home',
-        '/home/nav1': 'Nav 1',
-        '/home/nav2': 'Nav 2',
-        '/home/nav3': 'Nav 3'
-    };
-
-    // 生成面包屑导航项
-    const generateBreadcrumbItems = () => {
+    /**
+     * 生成面包屑导航项
+     */
+    const generateBreadcrumbItems = (): { title: string; href: string }[] => {
         const path = location.pathname;
         const pathParts = path.split('/').filter(part => part !== '');
-        const breadcrumbItems = [];
-        let currentPath = '';
+        const breadcrumbItems: { title: string; href: string }[] = [];
 
-        // 添加Home路径（如果路径不为空）
-        if (pathParts.length > 0) {
-            currentPath = '/' + pathParts[0];
+        pathParts.forEach((_, index) => {
+            const currentPath = '/' + pathParts.slice(0, index + 1).join('/');
+            const title = getRouteTitle(currentPath);
             breadcrumbItems.push({
-                title: pathTitleMap[currentPath] || pathParts[0],
+                title: title,
                 href: currentPath
             });
-        }
-
-        // 添加后续路径段
-        if (pathParts.length > 1) {
-            pathParts.slice(1).forEach((part) => {
-                currentPath = currentPath + '/' + part;
-                breadcrumbItems.push({
-                    title: pathTitleMap[currentPath] || part,
-                    href: currentPath
-                });
-            });
-        }
+        });
 
         return breadcrumbItems;
     };
 
+    /**
+     * 生成导航菜单项
+     */
+    const generateMenuItems = (): MenuProps['items'] => {
+        const children = getHomeRouteChildren();
+        return children
+            .filter(route => route.element && !route.redirect)
+            .map((route, index) => ({
+                key: (index + 1).toString(),
+                label: route.label ? <NavLink to={`/home/${route.path}`}>{route.label}</NavLink> : route.path
+            }));
+    };
+
     const breadcrumbItems = generateBreadcrumbItems();
+    const menuItems = generateMenuItems();
 
     return (
         <>
@@ -75,7 +65,7 @@ export default function GroupOptions() {
                     defaultSelectedKeys={['1']}
                     defaultOpenKeys={['sub1']}
                     className="group-options-menu"
-                    items={items2}
+                    items={menuItems}
                 />
             </Sider>
             <Layout className="group-options-layout">

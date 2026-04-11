@@ -28,5 +28,13 @@ export default defineConfig(async () => ({
       // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
+    // 开发模式下的source map配置
+    sourcemap: true,
+  },
+  
+  // 启用source map，以便在开发模式下能够映射回原始文件位置
+  build: {
+    sourcemap: true,
   },
 }));
+

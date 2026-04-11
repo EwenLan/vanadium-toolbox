@@ -1,42 +1,37 @@
-import {invoke} from "@tauri-apps/api/core";
+/**
+ * 日志工具
+ * 提供统一的日志记录接口，支持不同日志级别
+ */
+import { invoke } from "@tauri-apps/api/core";
+import { getCallerInfo } from './callerInfo';
 
-// 日志函数
+/**
+ * 创建日志函数
+ * @param level 日志级别
+ * @returns 日志函数
+ */
+const createLogFunction = (level: string) => {
+  return (message: string) => {
+    try {
+      const callerInfo = getCallerInfo();
+      const fullMessage = callerInfo ? `[${callerInfo}] ${message}` : message;
+      invoke('log_message', { level, message: fullMessage });
+    } catch (error) {
+      console.error(`Failed to log ${level} message:`, error);
+    }
+  };
+};
+
+/**
+ * 日志对象
+ * 提供trace、debug、info、warn、error五个级别的日志记录
+ */
 const log = {
-  trace: (message: string) => {
-    try {
-      invoke('log_message', { level: 'trace', message: message });
-    } catch (error) {
-      console.error('Failed to log trace message:', error);
-    }
-  },
-  debug: (message: string) => {
-    try {
-      invoke('log_message', { level: 'debug', message: message });
-    } catch (error) {
-      console.error('Failed to log debug message:', error);
-    }
-  },
-  info: (message: string) => {
-    try {
-      invoke('log_message', { level: 'info', message: message });
-    } catch (error) {
-      console.error('Failed to log info message:', error);
-    }
-  },
-  warn: (message: string) => {
-    try {
-      invoke('log_message', { level: 'warn', message: message });
-    } catch (error) {
-      console.error('Failed to log warn message:', error);
-    }
-  },
-  error: (message: string) => {
-    try {
-      invoke('log_message', { level: 'error', message: message });
-    } catch (error) {
-      console.error('Failed to log error message:', error);
-    }
-  }
+  trace: createLogFunction('trace'),
+  debug: createLogFunction('debug'),
+  info: createLogFunction('info'),
+  warn: createLogFunction('warn'),
+  error: createLogFunction('error')
 };
 
 export default log;
