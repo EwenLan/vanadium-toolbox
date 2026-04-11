@@ -1,12 +1,18 @@
 import type { MenuProps } from 'antd';
-import { Layout, Menu, Select } from 'antd';
+import { Layout, Menu, Select, Switch } from 'antd';
 import { NavLink, Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { MoonOutlined, SunOutlined } from '@ant-design/icons';
 import '../styles/appnavigator.css';
 
 const { Header } = Layout;
 
-export default function AppNavigator() {
+interface AppNavigatorProps {
+  isDarkMode: boolean;
+  toggleTheme: () => void;
+}
+
+export default function AppNavigator({ isDarkMode, toggleTheme }: AppNavigatorProps) {
     const { t, i18n } = useTranslation();
 
     const handleLanguageChange = (value: string) => {
@@ -29,22 +35,32 @@ export default function AppNavigator() {
             <Header className="app-navigator-header">
                 <div className="demo-logo" />
                 <Menu
-                    theme="dark"
+                    theme={isDarkMode ? "dark" : "light"}
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
                     items={items1}
                     className="app-navigator-menu"
                 />
-                <div className="language-selector">
-                    <Select
-                        defaultValue="zh-CN"
-                        style={{ width: 120 }}
-                        onChange={handleLanguageChange}
-                        options={[
-                            { value: 'zh-CN', label: t('language.zh-CN') },
-                            { value: 'en-US', label: t('language.en-US') },
-                        ]}
-                    />
+                <div className="header-controls">
+                    <div className="theme-toggle">
+                        <Switch
+                            checked={isDarkMode}
+                            onChange={toggleTheme}
+                            checkedChildren={<MoonOutlined />}
+                            unCheckedChildren={<SunOutlined />}
+                        />
+                    </div>
+                    <div className="language-selector">
+                        <Select
+                            defaultValue="zh-CN"
+                            style={{ width: 120 }}
+                            onChange={handleLanguageChange}
+                            options={[
+                                { value: 'zh-CN', label: t('language.zh-CN') },
+                                { value: 'en-US', label: t('language.en-US') },
+                            ]}
+                        />
+                    </div>
                 </div>
             </Header>
             <Layout>
