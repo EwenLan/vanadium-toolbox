@@ -33,7 +33,7 @@ export default function AppNavigator({ isDarkMode, toggleTheme }: AppNavigatorPr
     return (
         <Layout>
             <Header className="app-navigator-header" style={{ backgroundColor: isDarkMode ? '#001529' : '#ffffff', boxShadow: isDarkMode ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.15)' }}>
-                <div className="demo-logo" style={{ width: 120, height: 32, lineHeight: '32px', color: isDarkMode ? '#ffffff' : '#1890ff', fontWeight: 'bold', fontSize: '16px' }}>Vanadium Toolbox</div>
+
                 <Menu
                     theme={isDarkMode ? "dark" : "light"}
                     mode="horizontal"
