@@ -32,14 +32,15 @@ export default function AppNavigator({ isDarkMode, toggleTheme }: AppNavigatorPr
 
     return (
         <Layout>
-            <Header className="app-navigator-header">
-                <div className="demo-logo" />
+            <Header className="app-navigator-header" style={{ backgroundColor: isDarkMode ? '#001529' : '#ffffff', boxShadow: isDarkMode ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.15)' }}>
+                <div className="demo-logo" style={{ width: 120, height: 32, lineHeight: '32px', color: isDarkMode ? '#ffffff' : '#1890ff', fontWeight: 'bold', fontSize: '16px' }}>Vanadium Toolbox</div>
                 <Menu
                     theme={isDarkMode ? "dark" : "light"}
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
                     items={items1}
                     className="app-navigator-menu"
+                    style={{ backgroundColor: 'transparent' }}
                 />
                 <div className="header-controls">
                     <div className="theme-toggle">
@@ -48,6 +49,7 @@ export default function AppNavigator({ isDarkMode, toggleTheme }: AppNavigatorPr
                             onChange={toggleTheme}
                             checkedChildren={<MoonOutlined />}
                             unCheckedChildren={<SunOutlined />}
+                            style={{ color: isDarkMode ? '#1890ff' : '#1890ff' }}
                         />
                     </div>
                     <div className="language-selector">
