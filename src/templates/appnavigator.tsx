@@ -56,6 +56,9 @@ export default function AppNavigator({ isDarkMode, toggleTheme, language, change
                 route = '/home/nav1';
                 break;
             case '2':
+                route = '/external';
+                break;
+            case '3':
                 route = '/about';
                 break;
             default:
@@ -72,8 +75,13 @@ export default function AppNavigator({ isDarkMode, toggleTheme, language, change
         },
         {
             key: "2",
-            label: <NavLink to="/about">{t('nav.about')}</NavLink>,
+            label: <NavLink to="/external">{t('nav.external')}</NavLink>,
             onClick: () => handleNavClick('2'),
+        },
+        {
+            key: "3",
+            label: <NavLink to="/about">{t('nav.about')}</NavLink>,
+            onClick: () => handleNavClick('3'),
         },
     ];
 

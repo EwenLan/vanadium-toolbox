@@ -9,7 +9,6 @@ import Nav1 from '../pages/home/nav1';
 import Nav2 from '../pages/home/nav2';
 import Nav3 from '../pages/home/nav3';
 import About from '../pages/about';
-import ProgramsList from '../pages/external/programs';
 import ProgramDetail from '../pages/external/program';
 
 
@@ -78,17 +77,11 @@ export const routes: RouteConfig[] = [
         children: [
           {
             path: '',
-            redirect: 'programs',
+            redirect: 'md5sum',
             index: true
           },
           {
-            path: 'programs',
-            element: <ProgramsList />,
-            label: '程序列表',
-            title: '程序列表'
-          },
-          {
-            path: 'program/:id',
+            path: ':id',
             element: <ProgramDetail />,
             title: '程序详情'
           }

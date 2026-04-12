@@ -4,6 +4,7 @@
  */
 import { invoke } from "@tauri-apps/api/core";
 import { getCallerInfo } from './callerInfo';
+import { isTauri } from './tauri';
 
 /**
  * 创建日志函数
@@ -15,7 +16,31 @@ const createLogFunction = (level: string) => {
     try {
       const callerInfo = getCallerInfo();
       const fullMessage = callerInfo ? `[${callerInfo}] ${message}` : message;
-      invoke('log_message', { level, message: fullMessage });
+      
+      if (isTauri()) {
+        invoke('log_message', { level, message: fullMessage });
+      } else {
+        // 在浏览器环境中直接使用 console 输出日志
+        switch (level) {
+          case 'trace':
+            console.trace(fullMessage);
+            break;
+          case 'debug':
+            console.debug(fullMessage);
+            break;
+          case 'info':
+            console.info(fullMessage);
+            break;
+          case 'warn':
+            console.warn(fullMessage);
+            break;
+          case 'error':
+            console.error(fullMessage);
+            break;
+          default:
+            console.log(fullMessage);
+        }
+      }
     } catch (error) {
       console.error(`Failed to log ${level} message:`, error);
     }

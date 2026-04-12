@@ -22,12 +22,17 @@ export interface ProgramParameter {
 /**
  * 外部程序配置
  */
+export interface PlatformArgs {
+  [key: string]: string[];
+}
+
 export interface ExternalProgram {
   id: string;
   name: string;
   path: string;
   description: string;
   parameters: ProgramParameter[];
+  platformArgs?: PlatformArgs;
 }
 
 /**

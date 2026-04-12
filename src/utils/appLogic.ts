@@ -5,7 +5,23 @@
 import log from './logger';
 import { loadConfig } from './config';
 import { toggleTheme } from './theme';
-import { changeLanguage } from './language';
+import { changeLanguage as changeLanguageUtil } from './language';
+
+/**
+ * 切换语言
+ * @param language 当前语言
+ * @param newLanguage 新语言
+ * @param setLanguage 设置语言的回调函数
+ * @param isDarkMode 当前主题模式
+ */
+export const changeLanguage = async (
+  language: string, 
+  newLanguage: string, 
+  setLanguage: (value: string) => void,
+  isDarkMode: boolean = false
+) => {
+  return changeLanguageUtil(language, newLanguage, setLanguage, isDarkMode);
+};
 
 /**
  * 加载应用配置
@@ -18,7 +34,7 @@ export const loadAppConfig = async (
 ) => {
   try {
     const config = await loadConfig();
-    log.debug(`Setting theme to ${config.theme}, language to ${config.language}`);
+    log.info(`Setting theme to ${config.theme}, language to ${config.language}`);
     setIsDarkMode(config.theme === 'dark');
     setLanguage(config.language);
     
@@ -29,4 +45,4 @@ export const loadAppConfig = async (
   }
 };
 
-export { toggleTheme, changeLanguage };
+export { toggleTheme };

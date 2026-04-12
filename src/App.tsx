@@ -41,7 +41,7 @@ function App() {
    * @param newLanguage 新语言代码
    */
   const handleChangeLanguage = async (newLanguage: string) => {
-    await changeLanguage(language, newLanguage, setLanguage);
+    await changeLanguage(language, newLanguage, setLanguage, isDarkMode);
   };
 
   return (

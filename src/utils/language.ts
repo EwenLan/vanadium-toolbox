@@ -25,25 +25,27 @@ const changeI18nLanguage = async (language: string) => {
  * @param language 当前语言
  * @param newLanguage 新语言
  * @param setLanguage 设置语言的回调函数
+ * @param isDarkMode 当前主题模式
  */
 export const changeLanguage = async (
   language: string, 
   newLanguage: string, 
-  setLanguage: (value: string) => void
+  setLanguage: (value: string) => void,
+  isDarkMode: boolean = false
 ) => {
-  log.info(`Changing language from ${language} to ${newLanguage}`);
+  log.info(`Changing language from ${language} to ${newLanguage}, current theme: ${isDarkMode ? 'dark' : 'light'}`);
   
   setLanguage(newLanguage);
   await changeI18nLanguage(newLanguage);
   
   try {
     await saveConfig({
-      theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+      theme: isDarkMode ? 'dark' : 'light',
       language: newLanguage,
       window_width: 800,
       window_height: 600
     });
-    log.info(`Language saved successfully: ${newLanguage}`);
+    log.info(`Language saved successfully: ${newLanguage}, theme: ${isDarkMode ? 'dark' : 'light'}`);
   } catch (error: any) {
     log.error(`Failed to save language config: ${error.message}`);
   }

@@ -9,11 +9,13 @@
         {
           "name": "input",
           "label": "输入",
-          "type": "string",
+          "type_": "string",
           "required": true,
+          "default": null,
           "description": "要计算 MD5 的字符串或文件路径"
         }
-      ]
+      ],
+      "platform_args": null
     },
     {
       "id": "echo",
@@ -24,11 +26,13 @@
         {
           "name": "message",
           "label": "消息",
-          "type": "string",
+          "type_": "string",
           "required": true,
+          "default": null,
           "description": "要输出的消息"
         }
-      ]
+      ],
+      "platform_args": null
     },
     {
       "id": "ping",
@@ -39,25 +43,21 @@
         {
           "name": "host",
           "label": "主机",
-          "type": "string",
+          "type_": "string",
           "required": true,
+          "default": null,
           "description": "要 ping 的主机地址"
         },
         {
           "name": "count",
           "label": "次数",
-          "type": "number",
+          "type_": "number",
           "required": false,
           "default": 4,
           "description": "ping 的次数"
         }
       ],
-      "platformArgs": {
-        "win32": [
-          "-n",
-          "{count}",
-          "{host}"
-        ],
+      "platform_args": {
         "darwin": [
           "-c",
           "{count}",
@@ -65,6 +65,11 @@
         ],
         "linux": [
           "-c",
+          "{count}",
+          "{host}"
+        ],
+        "win32": [
+          "-n",
           "{count}",
           "{host}"
         ]
