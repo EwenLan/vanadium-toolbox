@@ -58,6 +58,11 @@
         }
       ],
       "platform_args": {
+        "any": [
+          "-n",
+          "{count}",
+          "{host}"
+        ],
         "darwin": [
           "-c",
           "{count}",

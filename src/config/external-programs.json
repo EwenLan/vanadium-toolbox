@@ -53,6 +53,11 @@
         }
       ],
       "platformArgs": {
+        "any": [
+          "-n",
+          "{count}",
+          "{host}"
+        ],
         "win32": [
           "-n",
           "{count}",

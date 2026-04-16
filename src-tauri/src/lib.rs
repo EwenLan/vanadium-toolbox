@@ -13,6 +13,7 @@ pub fn run() {
             config::read_config,
             config::write_config,
             config::read_external_programs_config,
+            config::get_platform,
             logging::log_message,
             programs::execute_program
         ])

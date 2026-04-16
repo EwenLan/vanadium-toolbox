@@ -116,6 +116,7 @@ impl Default for ExternalProgramsConfig {
                     ],
                     platform_args: Some(PlatformArgs {
                         args: vec![
+                            ("any".to_string(), vec!["-n".to_string(), "{count}".to_string(), "{host}".to_string()]),
                             ("win32".to_string(), vec!["-n".to_string(), "{count}".to_string(), "{host}".to_string()]),
                             ("darwin".to_string(), vec!["-c".to_string(), "{count}".to_string(), "{host}".to_string()]),
                             ("linux".to_string(), vec!["-c".to_string(), "{count}".to_string(), "{host}".to_string()]),
@@ -241,4 +242,18 @@ fn write_external_programs_config_to_file(config_path: &PathBuf, config: &Extern
             error!("Failed to write external programs config file: {}", e);
             format!("Failed to write external programs config file: {}", e)
         })
+}
+
+#[tauri::command]
+pub fn get_platform() -> String {
+    let os = std::env::consts::OS;
+    info!("Current OS: {}", os);
+    let platform = match os {
+        "windows" => "win32",
+        "macos" => "darwin",
+        "linux" => "linux",
+        other => other,
+    };
+    info!("Mapped platform: {}", platform);
+    platform.to_string()
 }

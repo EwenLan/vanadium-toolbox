@@ -8,15 +8,11 @@ import { Typography, Form, Input, InputNumber, Button, Spin, Alert, Card, Divide
 
 import log from '../../utils/logger';
 import { useExternalPrograms } from '../../utils/externalProgramsState';
+import { getCurrentPlatform, buildCommandArgs } from '../../utils/externalPrograms';
 import { ExternalProgram, ProgramParameter } from '../../types/external-programs';
 
 // 导入 Tauri 事件系统
 import { listen } from '@tauri-apps/api/event';
-
-// 声明 process 类型
-declare const process: {
-  platform: string;
-};
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -132,90 +128,22 @@ export default function ProgramDetail() {
       setRealtimeOutput({ stdout: '', stderr: '' }); // 重置实时输出
 
       log.info(`Executing program: ${program.name}`);
-      
-      // 构建命令参数
-      const args: string[] = [];
-      
-      // 获取当前平台类型（安全获取，避免在浏览器环境中出错）
-      let platform = 'unknown';
-      try {
-        log.info(`Checking process object: ${typeof process}`);
-        if (typeof process !== 'undefined') {
-          log.info(`process.platform exists: ${typeof process.platform !== 'undefined'}`);
-          platform = process.platform || 'unknown';
-        } else {
-          log.info('process object is undefined');
-        }
-      } catch (error) {
-        log.warn(`Failed to get platform: ${error}`);
-      }
-      
+
+      // 获取当前平台类型
+      const platform = await getCurrentPlatform();
       log.info(`Detected platform: ${platform}`);
-      
-      // 检查是否有平台特定的参数配置
-      log.info(`Program platformArgs: ${JSON.stringify(program.platformArgs)}`);
-      
-      if (program.platformArgs) {
-        // 尝试使用检测到的平台
-        if (program.platformArgs[platform]) {
-          log.info(`Using platform-specific args for ${platform}`);
-          // 使用平台特定的参数格式
-          program.platformArgs[platform].forEach(argTemplate => {
-            // 替换参数模板中的变量
-            let arg = argTemplate;
-            for (const param of program.parameters) {
-              const value = values[param.name];
-              if (value !== undefined && value !== null) {
-                arg = arg.replace(`{${param.name}}`, value.toString());
-              }
-            }
-            // 只有当参数中没有未替换的变量时才添加
-            if (!arg.includes('{') && !arg.includes('}')) {
-              args.push(arg);
-            } else {
-              log.warn(`Skipping arg with un-replaced variables: ${arg}`);
-            }
-          });
-        } else {
-          // 检测到的平台没有配置，尝试使用默认平台
-          log.warn(`No platform-specific args for ${platform}, trying default platforms`);
-          
-          // 尝试使用 darwin（macOS）作为默认平台
-          if (program.platformArgs['darwin']) {
-            log.info('Using darwin platform args as default');
-            program.platformArgs['darwin'].forEach(argTemplate => {
-              let arg = argTemplate;
-              for (const param of program.parameters) {
-                const value = values[param.name];
-                if (value !== undefined && value !== null) {
-                  arg = arg.replace(`{${param.name}}`, value.toString());
-                }
-              }
-              if (!arg.includes('{') && !arg.includes('}')) {
-                args.push(arg);
-              }
-            });
-          } else {
-            // 没有平台特定配置时，直接传递参数
-            log.info('Using default args format');
-            program.parameters.forEach(param => {
-              const value = values[param.name];
-              if (value !== undefined && value !== null) {
-                args.push(value.toString());
-              }
-            });
-          }
+
+      // 构建参数字典
+      const paramValues: Record<string, string | number> = {};
+      program.parameters.forEach(param => {
+        const value = values[param.name];
+        if (value !== undefined && value !== null) {
+          paramValues[param.name] = value;
         }
-      } else {
-        // 没有平台特定配置时，直接传递参数
-        log.info('Using default args format');
-        program.parameters.forEach(param => {
-          const value = values[param.name];
-          if (value !== undefined && value !== null) {
-            args.push(value.toString());
-          }
-        });
-      }
+      });
+
+      // 使用模板方式构建命令参数
+      const args = buildCommandArgs(program.platformArgs, platform, paramValues);
 
       log.debug(`Command: ${program.path} ${args.join(' ')}`);
 
